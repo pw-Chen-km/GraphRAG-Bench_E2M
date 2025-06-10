@@ -6,4 +6,5 @@
 <!--    <a href=''><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-GraphRAG-Bench-blue'></a>
   </p>
 </div>
+      
 This is the official repo for GraphRAG-Bench: Challenging Domain-Specific Reasoning for Evaluating Graph Retrieval-Augmented Generation
