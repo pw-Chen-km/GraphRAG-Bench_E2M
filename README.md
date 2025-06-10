@@ -5,14 +5,14 @@ This is the official repo for GraphRAG-Bench: Challenging Domain-Specific Reason
    <p>
    <a href='https://deep-polyu.github.io/RAG/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
    <a href='https://arxiv.org/abs/2506.02404'><img src='https://img.shields.io/badge/arXiv-2506.02404-b31b1b'></a>
-   <a href='https://arxiv.org/abs/2506.02404'><img src='https://img.shields.io/badge/Huggingface-GraphRAGBench-blue.svg'></a>
+   <a href='https://huggingface.co/datasets/jeremycp3/GraphRAG-Bench'><img src='https://img.shields.io/badge/Huggingface-GraphRAGBench-blue.svg'></a>
   </p>
 </div>
 
 ## 🎉 News
 - **[2025-06-03]** The official leaderboard is released here: [GraphRAG-Bench leaderboard](https://deep-polyu.github.io/RAG/).
 - **[2025-06-03]** We have released the paper [GraphRAG-Bench](https://arxiv.org/abs/2506.02404).
-- **[2025-06-03]** We have released the dataset [GraphRAG-Bench](https://arxiv.org/abs/2506.02404).
+- **[2025-06-03]** We have released the dataset [GraphRAG-Bench](https://huggingface.co/datasets/jeremycp3/GraphRAG-Bench).
 ![](doc/fig1.jpg)
 
 ## 🏆 Leaderboard
@@ -86,7 +86,7 @@ data_name/
 
 ## 🧪 Experiments
 ### Reasoning
-Reasoning score R is to evaluate their semantic correspondence and reasoning consistency with gold rationale. The AR metric is to determine whether the model is able to provide correct reasoning when it answers the question accurately.
+Reasoning score R is to evaluate the semantic correspondence and reasoning consistency with gold rationale. The AR metric is to determine whether the model is able to provide correct reasoning when it answers the question accurately.
 ![](doc/reasoning.jpg)
 ### Accuracy
 Accuracy evaluates whether the generated results are consistent with the groundtruth.
