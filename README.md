@@ -41,7 +41,8 @@ Question example
 
 ```
 ### Corpus
-We parsed out the images and content of the textbook. Users only need text content to use.md files, metadata to use.json files, and the presence of image supports multi-modal RAG methods.
+We parsed out the images and content of the textbook. If you only need text content, use .md files. If you need metadata, use .json files. The presence of image supports multi-modal RAG methods.
+
 ```
 Corpus/
 ├── Algorithms/   #Textbook name
