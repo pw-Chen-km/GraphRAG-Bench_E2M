@@ -10,15 +10,18 @@ This is the official repo for GraphRAG-Bench: Challenging Domain-Specific Reason
 </div>
 
 ## 🎉 News
+- **[2025-06-03]** The official leaderboard is released here: [GraphRAG-Bench leaderboard](https://deep-polyu.github.io/RAG/).
 - **[2025-06-03]** We have released the paper [GraphRAG-Bench](https://arxiv.org/abs/2506.02404).
 - **[2025-06-03]** We have released the dataset [GraphRAG-Bench](https://arxiv.org/abs/2506.02404).
-
-
-
 ![](doc/fig1.jpg)
+
+## 🏆 Leaderboard
+The official leaderboard could be found hereunder:
+[GraphRAG-Bench leaderboard](https://deep-polyu.github.io/RAG/)
 
 ## Dataset
 The structure of the dataset is shown below:
+
 ### Question
 ```
 Question/
