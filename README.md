@@ -74,6 +74,11 @@ data_name/
 └── results_tmp.json (Generated after the code is run)
 ```
 
+## Leaderboard
+### Reasoning
+![](doc/reasoning.jpg)
+### Accuracy
+![](doc/accuracy.jpg)
 ## Citation
 
 If you find this repository helpful, please consider citing our paper:
