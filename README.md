@@ -50,13 +50,14 @@ Question example (Open-ended)
 
 ```
 ### 📄 Corpus
-We parsed out the images and content of the textbook. If you only need text content, use .md files. If you need metadata, use .json files. The presence of image supports multi-modal RAG methods.
+We parsed out the images and content of the textbook. If you only need text content, use .md files (ecommend). If you need metadata, use _structured.json or _content_list.json files. The presence of image supports multi-modal RAG methods.
 
 ```
 Corpus/
 ├── Algorithms/   #Textbook name
 │    ├── image
 │    ├── Algorithms.md
+│    ├── Algorithms_structured.json
 │    └── Algorithms_content_list.json
 │...
 ├── Database system concepts/...
@@ -65,8 +66,7 @@ Corpus/
 ```
 
 ## ⚖️ Evaluator
-We provide the evaluator.py for evaluation.
-Place your output files in the following structure:
+We provide the evaluator.py for evaluation. Place your output files in the following structure:
 ```
 data_name/
 ├── question/
