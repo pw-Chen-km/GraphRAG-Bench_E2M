@@ -5,7 +5,7 @@ This is the official repo for GraphRAG-Bench: Challenging Domain-Specific Reason
    <p>
    <a href='https://deep-polyu.github.io/RAG/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
    <a href='https://arxiv.org/abs/2506.02404'><img src='https://img.shields.io/badge/arXiv-2506.02404-b31b1b'></a>
-   <a href=''><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-GraphRAG-Bench-blue'></a>
+   <a href='https://arxiv.org/abs/2506.02404'><img src='https://img.shields.io/badge/Huggingface-GraphRAGBench-blue.svg'></a>
   </p>
 </div>
 
@@ -22,11 +22,11 @@ The structure of the dataset is shown below:
 ### Question
 ```
 Question/
-├── FB.jsonl
-├── MC.jsonl
-├── MS.jsonl
-├── OE.jsonl
-├── TF.jsonl
+├── FB.jsonl   #Fill-in-blank
+├── MC.jsonl   #Multi-choice
+├── MS.jsonl   #Multi-select
+├── OE.jsonl   #True-or-false
+├── TF.jsonl   #Open-ended
 ```
 
 ```
@@ -41,5 +41,49 @@ Question example
 
 ```
 ### Corpus
+We parsed out the images and content of the textbook. Users only need text content to use.md files, metadata to use.json files, and the presence of image supports multi-modal RAG methods.
+```
+Corpus/
+├── Algorithms/   #Textbook name
+│    ├── image
+│    ├── Algorithms.md
+│    └── Algorithms_content_list.json
+│...
+├── Database system concepts/...
+└── Speech and Language Processing/...
 
+```
+
+## Evaluator
+We provide the evaluator.py for evaluation.
+Place your output files in the following structure:
+```
+data_name/
+├── question/
+│   ├── FB.jsonl
+│   ├── MC.jsonl
+│   ├── MS.jsonl
+│   ├── OE.jsonl
+│   └── TF.jsonl
+├── output/
+│   ├── GraphRAG-Bench_FB
+│   ├── GraphRAG-Bench_MC
+│   ├── GraphRAG-Bench_MS
+│   ├── GraphRAG-Bench_OE
+│   └── GraphRAG-Bench_TF
+└── results_tmp.json (Generated after the code is run)
+```
+
+## Citation
+
+If you find this repository helpful, please consider citing our paper:
+
+```bibtex
+@article{xiao2025graphrag,
+  title={GraphRAG-Bench: Challenging Domain-Specific Reasoning for Evaluating Graph Retrieval-Augmented Generation},
+  author={Xiao, Yilin and Dong, Junnan and Zhou, Chuang and Dong, Su and Zhang, Qianwen and Yin, Di and Sun, Xing and Huang, Xiao},
+  journal={arXiv preprint arXiv:2506.02404},
+  year={2025}
+}
+```
 
