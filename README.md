@@ -10,16 +10,25 @@ This is the official repo for GraphRAG-Bench: Challenging Domain-Specific Reason
 </div>
 
 ## 🎉 News
+- **[2025-06-03]** The official leaderboard is released here: [GraphRAG-Bench leaderboard](https://deep-polyu.github.io/RAG/).
 - **[2025-06-03]** We have released the paper [GraphRAG-Bench](https://arxiv.org/abs/2506.02404).
 - **[2025-06-03]** We have released the dataset [GraphRAG-Bench](https://arxiv.org/abs/2506.02404).
-
-
-
 ![](doc/fig1.jpg)
 
-## Dataset
-The structure of the dataset is shown below:
-### Question
+## 🏆 Leaderboard
+The official leaderboard could be found hereunder:
+[GraphRAG-Bench leaderboard](https://deep-polyu.github.io/RAG/)
+
+## 📚 Dataset
+It contains 5 question types spanning 16 disciplines and a corpus of 7 million words from 20 computer science textbooks. The structure of the dataset is shown below:
+
+### ❓ Question
+We defined five types of questions:
+- ![img.png](doc/Fill-in-blank.png)Fill-in-blank
+- ![img.png](doc/Multi-choice.png)Multi-choice
+- ![img.png](doc/Multi-select.png)Multi-select
+- ![img.png](doc/True-or-false.png)True-or-false
+- ![img.png](doc/Open-ended.png)Open-ended
 ```
 Question/
 ├── FB.jsonl   #Fill-in-blank
@@ -30,7 +39,7 @@ Question/
 ```
 
 ```
-Question example
+Question example (Open-ended)
 {
 "Question": "Why is it necessary for the server to use a special initial sequence number in the \n SYNACK?",
  "Level-1 Topic": "Computer networks", 
@@ -40,7 +49,7 @@ Question example
  }
 
 ```
-### Corpus
+### 📄 Corpus
 We parsed out the images and content of the textbook. If you only need text content, use .md files. If you need metadata, use .json files. The presence of image supports multi-modal RAG methods.
 
 ```
@@ -55,7 +64,7 @@ Corpus/
 
 ```
 
-## Evaluator
+## ⚖️ Evaluator
 We provide the evaluator.py for evaluation.
 Place your output files in the following structure:
 ```
@@ -75,12 +84,14 @@ data_name/
 └── results_tmp.json (Generated after the code is run)
 ```
 
-## Leaderboard
+## 🧪 Experiments
 ### Reasoning
+Reasoning score R is to evaluate their semantic correspondence and reasoning consistency with gold rationale. The AR metric is to determine whether the model is able to provide correct reasoning when it answers the question accurately.
 ![](doc/reasoning.jpg)
 ### Accuracy
+Accuracy evaluates whether the generated results are consistent with the groundtruth.
 ![](doc/accuracy.jpg)
-## Citation
+## ✉️ Citation
 
 If you find this repository helpful, please consider citing our paper:
 
