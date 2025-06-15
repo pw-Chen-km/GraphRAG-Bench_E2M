@@ -50,15 +50,13 @@ Question example (Open-ended)
 
 ```
 ### 📄 Corpus
-We parsed out the images and content of the textbook. If you only need text content, use .md files (recommend). If you need metadata, use _structured.json or _content_list.json files. The presence of image supports multi-modal RAG methods.
+We parsed out the content of the textbook. If you only need text content, use .md files (recommend). If you need metadata and structure, use _structured.json.
 
 ```
 Corpus/
 ├── Algorithms/   #Textbook name
-│    ├── image
 │    ├── Algorithms.md
-│    ├── Algorithms_structured.json
-│    └── Algorithms_content_list.json
+│    └──Algorithms_structured.json
 │...
 ├── Database system concepts/...
 └── Speech and Language Processing/...
