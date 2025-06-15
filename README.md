@@ -50,7 +50,7 @@ Question example (Open-ended)
 
 ```
 ### 📄 Corpus
-We parsed out the images and content of the textbook. If you only need text content, use .md files (ecommend). If you need metadata, use _structured.json or _content_list.json files. The presence of image supports multi-modal RAG methods.
+We parsed out the images and content of the textbook. If you only need text content, use .md files (recommend). If you need metadata, use _structured.json or _content_list.json files. The presence of image supports multi-modal RAG methods.
 
 ```
 Corpus/
