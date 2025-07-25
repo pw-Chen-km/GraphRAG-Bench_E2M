@@ -1,0 +1,622 @@
+# Merged configuration file - Contains configuration parameters for all GraphRAG methods
+# Usage: Specify method_name in code to select corresponding configuration
+
+# Global default configuration
+llm:
+  api_type: "openai" # or openai
+  model: "gpt-4o-mini"
+  api_key: "YOUR_OPENAI_API_KEY"
+#  api_type: "open_llm" # or openai
+#  base_url: 'http://0.0.0.0:8000/v1'
+#  model: "meta-llama/Meta-Llama-3-8B"
+#  api_key: "ANY_THING_IS_OKAY"
+
+embedding:
+  api_type: "hf"  # or  ollama / openai.
+  # base_url: "https://cfcus02.opapi.win/v1"  # or forward url / other llm url
+  api_key: "YOUR_HUGGINGFACE_API_KEY"
+  model: "BAAI/bge-m3"  #BAAI/bge-m3
+#  model: "sentence-transformers/all-MiniLM-L6-v2"
+  cache_dir: ""
+  dimensions: 1024
+  max_token_size: 8102
+  embed_batch_size: 128
+  embedding_func_max_async: 16
+ 
+data_root:  "./Data" # Root directory for data
+working_dir: "./Data" # Result directory for the experiment
+exp_name: "default"  # Experiment name
+
+# ColBert Option
+use_colbert: True
+colbert_checkpoint_path: "/path/to/colbertv2.0"
+index_name: "nbits_2"
+similarity_max: 1.0
+
+# Method-specific configurations
+methods:
+  # HippoRAG configuration
+  hippo_rag:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: False  # Only set True for LightRAG
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: True  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: True
+
+    # Data
+    index_name: er_graph
+    vdb_type: faiss  # vector/colbert
+
+    # Chunk Config 
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config 
+    graph:
+      enable_edge_keywords: False
+      graph_type: er_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: False
+      # Building graph
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: False
+      enable_entity_type: False
+      enable_edge_description: False
+      enable_edge_name: True
+      prior_prob:  0.8
+      similarity_max: 1.0
+
+    # Retrieval Config 
+    retriever:
+      query_type: ppr # PPR is the retriever for HippoRAG
+      enable_local: False
+      use_entity_similarity_for_ppr: False
+      top_k_entity_for_ppr: 8
+      node_specificity: True
+      damping: 0.1
+      top_k: 5
+
+    query: 
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: False
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      # naive search
+      naive_max_token_for_text_unit: 12000
+      # local search
+      local_max_token_for_text_unit: 4000  # 12000 * 0.33
+      max_token_for_text_unit: 4000
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      # For IR-COT
+      max_ir_steps: 2
+
+  # GR (Graph Retrieval) configuration
+  gr:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: True  # Only set True for LightRAG, ToG and GR
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+
+    # Data
+    index_name: er_graph
+    vdb_type: vector  # vector/colbert
+
+    # Chunk Config
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config
+    graph:
+      enable_edge_keywords: True
+      graph_type: er_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: False
+      # Building graph
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: False
+      enable_entity_type: False
+      enable_edge_description: False
+      enable_edge_name: True
+
+    # Retrieval Config
+    retriever:
+      query_type: gr
+      enable_local: False
+      use_entity_similarity_for_ppr: False
+      node_specificity: False
+      # GR
+      top_k: 3
+      use_relations_vdb: True
+
+    query:
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: False
+      response_type: Multiple Paragraphs
+      # GR
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      # G-Retriever GR
+      top_k: 3
+      max_txt_len: 512
+      topk_e: 2
+      cost_e: 0.5
+
+  # ToG (Tree of Thoughts on Graph) configuration
+  tog:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: True  # Only set True for LightRAG, ToG and GR
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+
+    # Data
+    index_name: er_graph
+    vdb_type: vector  # vector/colbert
+
+    # Chunk Config
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config
+    graph:
+      enable_edge_keywords: True
+      graph_type: er_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: True
+      # Building graph
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: False
+      enable_entity_type: False
+      enable_edge_description: False
+      enable_edge_name: True
+
+    # Retrieval Config
+    retriever:
+      query_type: tog
+      enable_local: False
+      use_entity_similarity_for_ppr: False
+      node_specificity: False
+      top_k: 3
+
+    query:
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: False
+      response_type: Multiple Paragraphs
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      width: 3
+      depth: 3
+
+  # KGP (Knowledge Graph Passage) configuration
+  kgp:
+    # Data
+    index_name: passage_of_graph
+    vdb_type: vector  # vector/colbert
+
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: False  # Only set True for LightRAG
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+    token_model: gpt-3.5-turbo
+
+    # Chunk Config 
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      chunk_method: chunking_by_token_size
+
+    # Graph Config 
+    graph:
+      # Building graph
+      enable_entity_description: True
+      graph_type: passage_graph # passage_graph/er_graph/tree_graph/passage_graph
+      force: False
+      prior_prob: 0.8
+      summary_max_tokens: 500
+      llm_model_max_token_size: 32768
+
+    # Retrieval Config 
+    retriever:
+      query_type: kgp    
+
+    query: 
+      query_type: qa
+      top_k: 30
+      k_nei: 3
+
+  # RAPTOR configuration
+  raptor:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: False  # Only set True for LightRAG
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+
+    # Data
+    index_name: tree_graph_balanced
+    vdb_type: faiss  # vector/colbert
+
+    # Chunk Config 
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config 
+    graph:
+      enable_edge_keywords: False
+      graph_type: tree_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: False
+      # Tree Config
+      build_tree_from_leaves: False
+      reduction_dimension: 10
+      summarization_length: 100
+      num_layers:  5 # For RAPTOR
+      top_k: 5
+      start_layer:  5
+      selection_mode: top_k
+      max_length_in_cluster: 3500
+      threshold: 0.1 # For RAPTOR 
+      cluster_metric: cosine
+      verbose: False
+      random_seed: 224
+      threshold_cluster_num: 5000
+      enforce_sub_communities: False
+      max_size_percentage: 0.2
+      tol: 1e-4
+      max_iter: 10
+      size_of_clusters: 10
+
+    # Retrieval Config 
+    retriever:
+      query_type: basic
+      enable_local: False
+      use_entity_similarity_for_ppr: True
+      top_k_entity_for_ppr: 8
+      node_specificity: True
+      damping: 0.1
+      top_k: 5
+
+    query: 
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: True
+      response_type: Multiple Paragraphs
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      # naive search
+      naive_max_token_for_text_unit: 12000
+      # local search
+      local_max_token_for_text_unit: 4000  # 12000 * 0.33
+      max_token_for_text_unit: 4000
+      use_keywords: True
+      # Knob for RAPTOR
+      tree_search: True
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      max_token_for_local_context: 4800  # 12000 * 0.4
+      local_max_token_for_community_report: 3200  # 12000 * 0.27
+      local_community_single_one: False
+      # global search
+      use_global_query: True
+      global_min_community_rating:  0
+      global_max_consider_community: 512
+      global_max_token_for_community_report: 16384
+      max_token_for_global_context: 4000
+      global_special_community_map_llm_kwargs: {"response_format": {"type": "json_object"}}
+      # For IR-COT
+      max_ir_steps: 2
+
+  # LightRAG configuration
+  light_rag:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: True  # Only set True for LightRAG
+    use_subgraphs_vdb: False
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+
+    # Data
+    index_name: rkg_graph
+    vdb_type: vector  # vector/colbert
+
+    # Chunk Config 
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config 
+    graph:
+      enable_edge_keywords: True
+      graph_type: rkg_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: True
+      # Building graph
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: True
+      enable_entity_type: False
+      enable_edge_description: True
+      enable_edge_name: True
+
+    # Retrieval Config 
+    retriever:
+      query_type: basic
+      enable_local: False
+      use_entity_similarity_for_ppr: True
+      top_k_entity_for_ppr: 8
+      node_specificity: True
+      damping: 0.1
+      top_k: 5
+
+    query: 
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: True
+      response_type: Multiple Paragraphs
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      # naive search
+      naive_max_token_for_text_unit: 12000
+      # local search
+      local_max_token_for_text_unit: 4000  # 12000 * 0.33
+      max_token_for_text_unit: 4000
+      use_keywords: True
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      max_token_for_local_context: 4800  # 12000 * 0.4
+      local_max_token_for_community_report: 3200  # 12000 * 0.27
+      local_community_single_one: False
+      # global search
+      use_global_query: True
+      global_min_community_rating:  0
+      global_max_consider_community: 512
+      global_max_token_for_community_report: 16384
+      max_token_for_global_context: 4000
+      global_special_community_map_llm_kwargs: {"response_format": {"type": "json_object"}}
+      # For IR-COT
+      max_ir_steps: 2
+
+  # LGraphRAG configuration
+  lgraph_rag:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: False  # Only set True for LightRAG
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+
+    # Data
+    index_name: kg_graph
+    vdb_type: vector  # vector/colbert
+
+    # Chunk Config 
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config 
+    graph:
+      enable_edge_keywords: False
+      graph_type: rkg_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: True
+      # Building graph
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: True
+      enable_entity_type: False
+      enable_edge_description: True
+      enable_edge_name: True
+      prior_prob:  0.8
+      # Graph clustering
+      use_community: True
+      graph_cluster_algorithm: leiden
+      max_graph_cluster_size: 10
+      graph_cluster_seed: 0xDEADBEEF
+      summary_max_tokens: 500
+      random_seed: 224
+      enforce_sub_communities: False
+
+    # Retrieval Config 
+    retriever:
+      query_type: basic
+      enable_local: True
+      use_entity_similarity_for_ppr: True
+      top_k_entity_for_ppr: 8
+      node_specificity: True
+      damping: 0.1
+      top_k: 5
+      max_token_for_local_context: 4800  # 12000 * 0.4
+    
+    query: 
+      query_type: qa
+      only_need_context: False
+      augmentation_ppr: True
+      response_type: Multiple Paragraphs
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      # naive search
+      naive_max_token_for_text_unit: 12000
+      # local search
+      local_max_token_for_text_unit: 4000  # 12000 * 0.33
+      max_token_for_text_unit: 4000
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      local_max_token_for_community_report: 3200  # 12000 * 0.27
+      local_community_single_one: False
+      # global search
+      use_global_query: False
+      global_max_token_for_community_report: 16384
+      max_token_for_global_context: 4000
+      global_special_community_map_llm_kwargs: {"response_format": {"type": "json_object"}}
+      # For IR-COT
+      max_ir_steps: 2
+
+  # GGraphRAG configuration
+  ggraph_rag:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: False  # Only set True for LightRAG
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+
+    # Data
+    index_name: kg_graph
+    vdb_type: vector  # vector/colbert
+
+    # Chunk Config 
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config 
+    graph:
+      enable_edge_keywords: False
+      graph_type: rkg_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: False
+      # Building graph
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: True
+      enable_entity_type: False
+      enable_edge_description: True
+      enable_edge_name: True
+      prior_prob:  0.8
+      # Graph clustering
+      use_community: True
+      graph_cluster_algorithm: leiden
+      max_graph_cluster_size: 10
+      graph_cluster_seed: 0xDEADBEEF
+      summary_max_tokens: 500
+      random_seed: 224
+      enforce_sub_communities: False
+
+    # Retrieval Config 
+    retriever:
+      query_type: basic
+      enable_local: False
+      use_entity_similarity_for_ppr: True
+      top_k_entity_for_ppr: 8
+      node_specificity: True
+      damping: 0.1
+      top_k: 5
+      level: 2
+      max_token_for_local_context: 4800  # 12000 * 0.4
+    
+    query: 
+      query_type: qa
+      only_need_context: False
+      augmentation_ppr: True
+      response_type: Multiple Paragraphs
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      # naive search
+      naive_max_token_for_text_unit: 12000
+      # local search
+      local_max_token_for_text_unit: 4000  # 12000 * 0.33
+      max_token_for_text_unit: 4000
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      use_community: True
+      local_max_token_for_community_report: 3200  # 12000 * 0.27
+      local_community_single_one: False
+      # global search
+      use_global_query: True
+      global_min_community_rating:  0
+      global_max_consider_community: 512
+      global_max_token_for_community_report: 16384
+      max_token_for_global_context: 4000
+      global_special_community_map_llm_kwargs: {"response_format": {"type": "json_object"}}
+      # For IR-COT
+      max_ir_steps: 2
+
+  # Dalk configuration
+  dalk:
+    # Basic Config
+    use_entities_vdb: True
+    use_relations_vdb: False  # Only set True for LightRAG
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+    enable_graph_augmentation: False
+
+    # Data
+    index_name: er_graph
+    vdb_type: vector  # vector/colbert
+
+    # Chunk Config 
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gpt-3.5-turbo
+      chunk_method: chunking_by_token_size
+
+    # Graph Config 
+    graph:
+      enable_edge_keywords: True
+      graph_type: er_graph # rkg_graph/er_graph/tree_graph/passage_graph
+      force: True
+      # Building graph
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: False
+      enable_entity_type: False
+      enable_edge_description: True
+      enable_edge_name: True
+    
+    # Retrieval Config 
+    retriever:
+      query_type: dalk
+      enable_local: False
+      use_entity_similarity_for_ppr: False
+      node_specificity: False
+      top_k: 3
+
+    query: 
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: False
+      response_type: Multiple Paragraphs
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000 
