@@ -1,5 +1,5 @@
 """
-Refactored GraphRAG Main Entry File
+GraphRAG Main Entry File
 Adopts new architecture design providing better modularity and extensibility
 """
 import argparse
