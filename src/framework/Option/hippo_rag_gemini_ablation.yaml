@@ -1,0 +1,139 @@
+# Gemini-enabled HippoRAG configuration for evolving-graph ablation experiments.
+# Mirrors the OpenAI setup while switching the LLM provider to Google Gemini so
+# researchers can contrast baseline and evolving graph builders under Gemini.
+
+llm:
+  api_type: "gemini"
+  model: "gemini-1.5-pro"
+  api_key: "YOUR_GEMINI_API_KEY"
+
+embedding:
+  api_type: "hf"
+  api_key: "YOUR_HUGGINGFACE_API_KEY"
+  model: "BAAI/bge-m3"
+  cache_dir: ""
+  dimensions: 1024
+  max_token_size: 8102
+  embed_batch_size: 128
+  embedding_func_max_async: 16
+
+data_root: "./Data"
+working_dir: "./Data"
+exp_name: "hippo_rag_gemini_ablation"
+
+use_colbert: True
+colbert_checkpoint_path: "/path/to/colbertv2.0"
+index_name: "nbits_2"
+similarity_max: 1.0
+
+methods:
+  hippo_rag_er_graph:
+    use_entities_vdb: True
+    use_relations_vdb: False
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: True
+    enable_graph_augmentation: True
+
+    index_name: er_graph
+    vdb_type: faiss
+
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gemini-1.5-pro
+      chunk_method: chunking_by_token_size
+
+    graph:
+      enable_edge_keywords: False
+      graph_type: er_graph
+      force: False
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: False
+      enable_entity_type: False
+      enable_edge_description: False
+      enable_edge_name: True
+      prior_prob: 0.8
+      similarity_max: 1.0
+
+    retriever:
+      query_type: ppr
+      enable_local: False
+      use_entity_similarity_for_ppr: False
+      top_k_entity_for_ppr: 8
+      node_specificity: True
+      damping: 0.1
+      top_k: 5
+
+    query:
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: False
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      naive_max_token_for_text_unit: 12000
+      local_max_token_for_text_unit: 4000
+      max_token_for_text_unit: 4000
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      max_ir_steps: 2
+
+  hippo_rag_evolving_graph:
+    use_entities_vdb: True
+    use_relations_vdb: False
+    llm_model_max_token_size: 32768
+    use_entity_link_chunk: True
+    enable_graph_augmentation: True
+
+    index_name: er_graph
+    vdb_type: faiss
+
+    chunk:
+      chunk_token_size: 1200
+      chunk_overlap_token_size: 100
+      token_model: gemini-1.5-pro
+      chunk_method: chunking_by_token_size
+
+    graph:
+      enable_edge_keywords: False
+      graph_type: evolving_graph
+      force: False
+      extract_two_step: True
+      max_gleaning: 1
+      enable_entity_description: False
+      enable_entity_type: False
+      enable_edge_description: False
+      enable_edge_name: True
+      prior_prob: 0.8
+      similarity_max: 1.0
+      evolution:
+        max_steps: 3
+        seed_graph_type: rkg_graph
+        implicit_relation_candidate_pairs: 60
+        implicit_relation_hop: 1
+
+    retriever:
+      query_type: ppr
+      enable_local: False
+      use_entity_similarity_for_ppr: False
+      top_k_entity_for_ppr: 8
+      node_specificity: True
+      damping: 0.1
+      top_k: 5
+
+    query:
+      query_type: qa
+      only_need_context: False
+      enable_hybrid_query: True
+      augmentation_ppr: False
+      level: 2
+      community_information: True
+      retrieve_top_k: 20
+      naive_max_token_for_text_unit: 12000
+      local_max_token_for_text_unit: 4000
+      max_token_for_text_unit: 4000
+      entities_max_tokens: 2000
+      relationships_max_tokens: 2000
+      max_ir_steps: 2

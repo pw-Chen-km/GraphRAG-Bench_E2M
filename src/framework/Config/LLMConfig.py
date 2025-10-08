@@ -17,6 +17,7 @@ class LLMType(Enum):
     OPENAI = "openai"
     FIREWORKS = "fireworks"
     OPEN_LLM = "open_llm"
+    GEMINI = "gemini"
     OLLAMA = "ollama"  # /chat endpoint
     OLLAMA_GENERATE = "ollama.generate"  # /generate endpoint
     OLLAMA_EMBEDDINGS = "ollama.embeddings"  # /embeddings endpoint
