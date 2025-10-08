@@ -409,3 +409,87 @@ Input:
 {task}
 
 """
+ONTOLOGY_CRITIC = """
+You are an ontology critic tasked with reviewing the relations currently present in a knowledge graph.
+
+INPUT RELATIONS (JSON list):
+{relation_list}
+
+INSTRUCTIONS:
+- Identify relations that appear redundant, overlapping, or semantically vague.
+- Propose meaningful anomaly findings that will guide graph refactoring.
+- Only produce findings that can be justified by ontology best practices.
+
+RESPONSE FORMAT (JSON):
+{
+  "anomalies": [
+    {"type": "redundancy", "relations": ["rel_a", "rel_b"], "explanation": "Why they conflict or overlap."},
+    {"type": "vagueness", "relations": ["rel_x"], "explanation": "Why the relation is underspecified."}
+  ]
+}
+
+Return an empty list when there are no issues.
+"""
+
+
+ONTOLOGY_REFACTOR_HYPOTHESIS = """
+You are an ontology engineer. Given a detected anomaly in the knowledge graph ontology, design a single actionable refactoring hypothesis.
+
+ANOMALY (JSON object):
+{anomaly}
+
+GOALS:
+- Suggest one operation that resolves the anomaly (e.g., MERGE_RELATIONS, SPECIALIZE_RELATION).
+- Provide only the fields required to execute the operation.
+
+RESPONSE FORMAT (JSON):
+{
+  "operation": "MERGE_RELATIONS",
+  "relations": ["rel_a", "rel_b"],
+  "canonical_name": "preferred_relation",
+  "rationale": "Short explanation of the improvement."
+}
+
+If the anomaly cannot be fixed automatically, return an empty JSON object.
+"""
+
+
+GRAPH_STRUCTURE_REASONING_PROMPT = """
+You are an expert graph analyst and reasoning engine. Your task is to discover plausible, non-obvious (implicit) relationships between two entities based on their local graph structure and original text context.
+
+**Analysis Target:**
+- Entity 1: {entity1_name}
+- Entity 2: {entity2_name}
+
+**1. Local Graph Structure:**
+This is the existing knowledge graph context surrounding the two entities.
+{subgraph_context}
+
+**2. Original Text Context:**
+These are the raw text passages where the entities were mentioned.
+{text_context}
+
+**Your Task:**
+Based on BOTH the graph structure and the text context, answer the following questions:
+1. Is there a direct, implicit relationship between Entity 1 and Entity 2 that is not already present in the graph structure?
+2. If yes, what is the most likely relationship? Describe it as a single RDF triple (subject, predicate, object).
+
+Respond in a strict JSON format. If no plausible relationship is found, return "is_related": false.
+
+**Example 1 (Relationship Found):**
+{
+  "is_related": true,
+  "reasoning": "The text mentions that 'Project Titan' was led by John Doe, and the graph shows that 'Project Titan' uses 'MachineLearningModule_V2'. Therefore, it is highly likely that John Doe has expertise in 'MachineLearningModule_V2'.",
+  "triple": {
+    "subject": "John Doe",
+    "predicate": "has_expertise_in",
+    "object": "MachineLearningModule_V2"
+  }
+}
+
+**Example 2 (No Relationship Found):**
+{
+  "is_related": false,
+  "reasoning": "Although both entities are related to the same organization, there is no direct evidence in the text or graph structure to suggest a direct collaborative relationship."
+}
+"""

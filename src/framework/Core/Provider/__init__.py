@@ -2,11 +2,12 @@
 
 
 
-# from Core.Provider.ollama_api import OllamaLLM
 from Core.Provider.OpenaiApi import OpenAILLM
+from Core.Provider.GeminiApi import GeminiLLM
 
 
 __all__ = [
     "OpenAILLM",
+    "GeminiLLM",
     "OllamaLLM"
 ]
