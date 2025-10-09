@@ -17,6 +17,7 @@ class LLMType(Enum):
     OPENAI = "openai"
     FIREWORKS = "fireworks"
     OPEN_LLM = "open_llm"
+    GEMINI = "gemini"
     OLLAMA = "ollama"  # /chat endpoint
     OLLAMA_GENERATE = "ollama.generate"  # /generate endpoint
     OLLAMA_EMBEDDINGS = "ollama.embeddings"  # /embeddings endpoint
@@ -92,7 +93,7 @@ class LLMConfig(YamlModel):
     # Basic API Configuration
     api_key: str = "sk-"
     api_type: LLMType = LLMType.OPENAI
-    base_url: str = "https://api.openai.com/v1"
+    base_url: Optional[str] = None
     api_version: Optional[str] = None
     model: Optional[str] = None
     pricing_plan: Optional[str] = None

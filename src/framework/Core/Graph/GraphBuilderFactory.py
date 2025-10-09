@@ -20,6 +20,7 @@ class GraphType(Enum):
     """Graph types"""
     ENTITY_RELATION = "er_graph"
     RICH_KNOWLEDGE = "rkg_graph"
+    EVOLVING = "evolving_graph"
     TREE = "tree_graph"
     TREE_BALANCED = "tree_graph_balanced"
     PASSAGE = "passage_graph"
@@ -37,6 +38,7 @@ class GraphBuilderConfig:
     extract_two_step: bool = True
     max_gleaning: int = 1
     force_rebuild: bool = False
+    evolution: Dict[str, Any] = field(default_factory=dict)
 
 
 class GraphBuilder(ABC):
@@ -454,19 +456,29 @@ class GraphBuilderFactory:
             enable_edge_keywords=config.graph.enable_edge_keywords,
             extract_two_step=config.graph.extract_two_step,
             max_gleaning=config.graph.max_gleaning,
-            force_rebuild=config.graph.force
+            force_rebuild=config.graph.force,
+            evolution=getattr(config.graph, "evolution", {})
         )
-        
+
         builder_class = cls._builders.get(graph_config.graph_type, EntityRelationGraphBuilder)
         return builder_class(graph_config, context)
-    
+
     @classmethod
-    def register_builder(cls, graph_type: GraphType, builder_class: type):
+    def register_builder(cls, graph_type: Union[GraphType, str], builder_class: type):
         """Register new builder"""
+        if isinstance(graph_type, str):
+            graph_type = GraphType(graph_type)
         cls._builders[graph_type] = builder_class
         logger.info(f"Registered new graph builder: {graph_type.value}")
     
     @classmethod
     def get_available_types(cls) -> List[str]:
         """Get available graph types"""
-        return [graph_type.value for graph_type in cls._builders.keys()] 
+        return [graph_type.value for graph_type in cls._builders.keys()]
+
+
+# Ensure evolving builder registration on import
+try:  # pragma: no cover - defensive import
+    from .EvolvingGraphBuilder import EvolvingGraphBuilder  # noqa: F401
+except ImportError:  # pragma: no cover - optional component
+    pass
