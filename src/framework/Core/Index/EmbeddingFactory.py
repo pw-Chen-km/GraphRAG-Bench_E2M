@@ -90,16 +90,42 @@ class RAGEmbeddingFactory(GenericFactory):
     def _create_openai(self, config: Config) -> OpenAIEmbedding:
         """
         Create an OpenAI embedding model instance.
-        
+
         Args:
             config: Configuration object containing OpenAI parameters
-            
+
         Returns:
             OpenAIEmbedding instance
         """
+        openai_compatible_llms = {
+            LLMType.OPENAI,
+            LLMType.FIREWORKS,
+            LLMType.OPEN_LLM,
+        }
+
+        shared_api_key = None
+        shared_base_url = None
+
+        if config.llm.api_type in openai_compatible_llms:
+            shared_api_key = config.llm.api_key
+            shared_base_url = config.llm.base_url
+
+        api_key = config.embedding.api_key or shared_api_key
+        api_base = (
+            config.embedding.base_url
+            or shared_base_url
+            or "https://api.openai.com/v1"
+        )
+
+        if not api_key:
+            raise ValueError(
+                "OpenAI embeddings require an API key. "
+                "Set embedding.api_key or use an OpenAI-compatible LLM configuration."
+            )
+
         params = dict(
-            api_key=config.embedding.api_key or config.llm.api_key,
-            api_base=config.embedding.base_url or config.llm.base_url,
+            api_key=api_key,
+            api_base=api_base,
         )
 
         self._try_set_model_and_batch_size(params, config)
